@@ -23,7 +23,8 @@ public static class ModuleLoader
 
         services.AddScoped<IArticleRepository, ArticleRepository>();
         services.AddScoped<IAbonnementRepository, AbonnementRepository>();
-        services.AddScoped<IServiceNotification, ServiceNotificationConsole>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<IServiceNotification, ServiceNotificationDb>();
 
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(typeof(ModuleLoader).Assembly));
