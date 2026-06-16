@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CVTech.Api/CVTech.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/">
+    <Project Path="src/Modules/ActualiteEtAbonnement/ActualiteEtAbonnement.csproj" />
+    <Project Path="src/Modules/AppelOffreFreelance/AppelOffreFreelance.csproj" />
+    <Project Path="src/Modules/CatalogueEmploi/CatalogueEmploi.csproj" />
+    <Project Path="src/Modules/GestionIdentite/GestionIdentite.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ActualiteEtAbonnement.Tests/ActualiteEtAbonnement.Tests.csproj" />
+    <Project Path="tests/AppelOffreFreelance.Tests/AppelOffreFreelance.Tests.csproj" />
+    <Project Path="tests/CatalogueEmploi.Tests/CatalogueEmploi.Tests.csproj" />
+    <Project Path="tests/GestionIdentite.Tests/GestionIdentite.Tests.csproj" />
+  </Folder>
+</Solution>
