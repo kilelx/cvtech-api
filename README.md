@@ -169,8 +169,8 @@ graph TD
 ### 1. Cloner le dépôt
 
 ```bash
-git clone <url-du-repo>
-cd ia-skills
+git clone --recurse-submodules https://github.com/kilelx/cvtech-api.git
+cd cvtech-api
 ```
 
 ### 2. Configuration
