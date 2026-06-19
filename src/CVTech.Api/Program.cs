@@ -9,6 +9,10 @@ using CVTech.Modules.CatalogueEmploi.Client.Controllers;
 using CVTech.Modules.CatalogueEmploi.Infrastructure.Persistence;
 using CVTech.Modules.CatalogueEmploi.Loader;
 using CVTech.Modules.GestionIdentite.Client.Controllers;
+using CVTech.Modules.ActualiteEtAbonnement.Domain.Exceptions;
+using CVTech.Modules.AppelOffreFreelance.Domain.Exceptions;
+using CVTech.Modules.CatalogueEmploi.Domain.Exceptions;
+using CVTech.Modules.GestionIdentite.Contracts;
 using CVTech.Modules.GestionIdentite.Domain.Exceptions;
 using CVTech.Modules.GestionIdentite.Infrastructure.Persistence;
 using CVTech.Modules.GestionIdentite.Loader;
@@ -134,16 +138,24 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler(errorApp => errorApp.Run(async ctx =>
 {
     var feature = ctx.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
-    if (feature?.Error is UtilisateurExistantException ex)
+    var error = feature?.Error;
+    ctx.Response.ContentType = "application/json";
+    (int statusCode, string message) = error switch
     {
-        ctx.Response.StatusCode = 409;
-        ctx.Response.ContentType = "application/json";
-        await ctx.Response.WriteAsJsonAsync(new { error = ex.Message });
-    }
-    else
-    {
-        ctx.Response.StatusCode = 500;
-    }
+        PermissionRefuseeException e => (403, e.Message),
+        AnnonceIntrouvableException e => (404, e.Message),
+        AppelOffreIntrouvableException e => (404, e.Message),
+        ArticleIntrouvableException e => (404, e.Message),
+        AbonnementNonTrouveException e => (404, e.Message),
+        NotificationNonTrouveException e => (404, e.Message),
+        UtilisateurExistantException e => (409, e.Message),
+        CandidatureDejaExistanteException e => (409, e.Message),
+        AbonnementDejaExistantException e => (409, e.Message),
+        AppelOffreClosException e => (409, e.Message),
+        _ => (500, "Une erreur interne est survenue.")
+    };
+    ctx.Response.StatusCode = statusCode;
+    await ctx.Response.WriteAsJsonAsync(new { error = message });
 }));
 
 app.UseCors();

@@ -13,7 +13,7 @@ public class PublierArticleCommandHandler(
     public async Task<Guid> Handle(PublierArticleCommand request, CancellationToken cancellationToken)
     {
         if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.PublierArticleActualite, cancellationToken))
-            throw new UnauthorizedAccessException("Permission refusée : publication d'article.");
+            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.PublierArticleActualite));
 
         var article = ArticleActualite.Creer(request.Titre, request.Contenu, request.UtilisateurId, request.DomaineMetier);
         await articleRepository.AjouterAsync(article, cancellationToken);

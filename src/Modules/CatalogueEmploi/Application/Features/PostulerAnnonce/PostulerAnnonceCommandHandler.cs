@@ -15,7 +15,7 @@ public class PostulerAnnonceCommandHandler(
     public async Task<Guid> Handle(PostulerAnnonceCommand request, CancellationToken cancellationToken)
     {
         if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.PostulerAnnonce, cancellationToken))
-            throw new UnauthorizedAccessException("Permission refusée : candidature.");
+            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.PostulerAnnonce));
 
         var annonce = await annonceRepository.ObtenirParIdAsync(request.AnnonceId, cancellationToken)
             ?? throw new AnnonceIntrouvableException(request.AnnonceId);

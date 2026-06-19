@@ -8,6 +8,7 @@ public interface IProfilRepository
     Task<RoleUtilisateur?> ObtenirRoleAsync(Guid utilisateurId, CancellationToken cancellationToken = default);
     Task<ProfilCandidat?> ObtenirCandidatParEmailAsync(string email, CancellationToken cancellationToken = default);
     Task<ProfilEntreprise?> ObtenirEntrepriseParEmailAsync(string email, CancellationToken cancellationToken = default);
+    Task<Administrateur?> ObtenirAdministrateurParEmailAsync(string email, CancellationToken cancellationToken = default);
     Task AjouterCandidatAsync(ProfilCandidat profil, CancellationToken cancellationToken = default);
     Task AjouterEntrepriseAsync(ProfilEntreprise profil, CancellationToken cancellationToken = default);
     Task<bool> EstCompteActifAsync(Guid utilisateurId, CancellationToken cancellationToken = default);

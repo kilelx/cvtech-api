@@ -19,4 +19,12 @@ public class AppelOffreRepository(AppelOffreDbContext db) : IAppelOffreRepositor
 
     public async Task<IReadOnlyList<AppelOffre>> ListerOuvertsAsync(CancellationToken cancellationToken = default)
         => await db.AppelsOffre.Where(a => a.Statut == StatutAppelOffre.Ouvert).ToListAsync(cancellationToken);
+
+    public async Task SupprimerAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var ao = await db.AppelsOffre.FindAsync([id], cancellationToken);
+        if (ao is null) return;
+        ao.Clore();
+        await db.SaveChangesAsync(cancellationToken);
+    }
 }

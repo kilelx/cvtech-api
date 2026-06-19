@@ -15,7 +15,7 @@ public class PublierAppelOffreCommandHandler(
     public async Task<Guid> Handle(PublierAppelOffreCommand request, CancellationToken cancellationToken)
     {
         if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.PublierAppelOffre, cancellationToken))
-            throw new UnauthorizedAccessException("Permission refusée : publication d'appel d'offre.");
+            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.PublierAppelOffre));
 
         var ao = AppelOffre.Creer(request.Titre, request.Contexte, request.DomaineMetier, request.BudgetMax, request.Deadline, request.UtilisateurId);
         await repository.AjouterAsync(ao, cancellationToken);

@@ -1,4 +1,5 @@
 using CVTech.Modules.AppelOffreFreelance.Application.Features.ListerAppelsOffre;
+using CVTech.Modules.AppelOffreFreelance.Application.Features.SupprimerAppelOffre;
 using CVTech.Modules.AppelOffreFreelance.Application.Features.PublierAppelOffre;
 using CVTech.Modules.AppelOffreFreelance.Application.Features.SoumettreProposition;
 using CVTech.Modules.AppelOffreFreelance.Client.DTOs;
@@ -38,6 +39,14 @@ public class AppelOffreController(ISender sender) : ControllerBase
         var uid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
         var id = await sender.Send(new PublierAppelOffreCommand(uid, dto.Titre, dto.Contexte, dto.DomaineMetier, dto.BudgetMax, dto.Deadline), ct);
         return CreatedAtAction(nameof(Publier), new { id }, new { id });
+    }
+
+    [HttpDelete("{appelOffreId:guid}")]
+    public async Task<IActionResult> Supprimer(Guid appelOffreId, CancellationToken ct)
+    {
+        var uid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        await sender.Send(new SupprimerAppelOffreCommand(uid, appelOffreId), ct);
+        return NoContent();
     }
 
     [HttpPost("{appelOffreId:guid}/propositions")]

@@ -31,6 +31,13 @@ public class ConnecterUtilisateurQueryHandler : IRequestHandler<ConnecterUtilisa
             return new ConnexionResultat(entreprise.Id, entreprise.Role.ToString(), token);
         }
 
+        var admin = await _profilRepository.ObtenirAdministrateurParEmailAsync(request.Email, cancellationToken);
+        if (admin is not null && BCrypt.Net.BCrypt.Verify(request.MotDePasse, admin.MotDePasseHache))
+        {
+            var token = _jwtService.GenererToken(admin.Id, admin.Role.ToString());
+            return new ConnexionResultat(admin.Id, admin.Role.ToString(), token);
+        }
+
         throw new UnauthorizedAccessException("Email ou mot de passe incorrect.");
     }
 }

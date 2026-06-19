@@ -16,7 +16,7 @@ public class SoumettrePropositionCommandHandler(
     public async Task<Guid> Handle(SoumettrePropositionCommand request, CancellationToken cancellationToken)
     {
         if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.SoumettrePropositionFreelance, cancellationToken))
-            throw new UnauthorizedAccessException("Permission refusée : soumission de proposition.");
+            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.SoumettrePropositionFreelance));
 
         var ao = await appelOffreRepository.ObtenirParIdAsync(request.AppelOffreId, cancellationToken)
             ?? throw new AppelOffreIntrouvableException(request.AppelOffreId);

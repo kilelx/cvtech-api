@@ -1,4 +1,4 @@
-namespace CVTech.Modules.GestionIdentite.Domain.Exceptions;
+namespace CVTech.Modules.GestionIdentite.Contracts;
 
 public class PermissionRefuseeException : Exception
 {

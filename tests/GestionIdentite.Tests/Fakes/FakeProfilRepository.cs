@@ -46,6 +46,9 @@ public class FakeProfilRepository : IProfilRepository
     public Task<ProfilEntreprise?> ObtenirEntrepriseParEmailAsync(string email, CancellationToken cancellationToken = default)
         => Task.FromResult(_entreprises.FirstOrDefault(e => e.Email == email));
 
+    public Task<Administrateur?> ObtenirAdministrateurParEmailAsync(string email, CancellationToken cancellationToken = default)
+        => Task.FromResult(_admins.FirstOrDefault(a => a.Email == email));
+
     public Task AjouterCandidatAsync(ProfilCandidat profil, CancellationToken cancellationToken = default)
     {
         _candidats.Add(profil);

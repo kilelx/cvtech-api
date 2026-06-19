@@ -18,4 +18,15 @@ public class AnnonceRepository(CatalogueEmploiDbContext db) : IAnnonceRepository
 
     public async Task<IReadOnlyList<AnnonceEmploi>> ListerActivesAsync(CancellationToken cancellationToken = default)
         => await db.Annonces.Where(a => a.EstActive).ToListAsync(cancellationToken);
+
+    public async Task<IReadOnlyList<AnnonceEmploi>> ListerParEntrepriseAsync(Guid entrepriseId, CancellationToken cancellationToken = default)
+        => await db.Annonces.Where(a => a.EntrepriseId == entrepriseId).ToListAsync(cancellationToken);
+
+    public async Task SupprimerAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var annonce = await db.Annonces.FindAsync([id], cancellationToken);
+        if (annonce is null) return;
+        annonce.Desactiver();
+        await db.SaveChangesAsync(cancellationToken);
+    }
 }

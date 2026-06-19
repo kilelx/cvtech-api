@@ -35,6 +35,9 @@ public class ProfilRepository : IProfilRepository
     public Task<ProfilEntreprise?> ObtenirEntrepriseParEmailAsync(string email, CancellationToken cancellationToken = default)
         => _context.ProfilsEntreprises.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
 
+    public Task<Administrateur?> ObtenirAdministrateurParEmailAsync(string email, CancellationToken cancellationToken = default)
+        => _context.Administrateurs.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+
     public async Task AjouterCandidatAsync(ProfilCandidat profil, CancellationToken cancellationToken = default)
         => await _context.ProfilsCandidats.AddAsync(profil, cancellationToken);
 

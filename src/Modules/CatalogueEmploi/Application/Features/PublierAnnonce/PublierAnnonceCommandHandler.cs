@@ -15,7 +15,7 @@ public class PublierAnnonceCommandHandler(
     public async Task<Guid> Handle(PublierAnnonceCommand request, CancellationToken cancellationToken)
     {
         if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.PublierAnnonceEmploi, cancellationToken))
-            throw new UnauthorizedAccessException("Permission refusée : publication d'annonce.");
+            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.PublierAnnonceEmploi));
 
         var annonce = AnnonceEmploi.Creer(request.Titre, request.Description, request.DomaineMetier, request.TypeContrat, request.UtilisateurId);
         await annonceRepository.AjouterAsync(annonce, cancellationToken);

@@ -20,4 +20,13 @@ public class FakeAnnonceRepository : IAnnonceRepository
 
     public Task<IReadOnlyList<AnnonceEmploi>> ListerActivesAsync(CancellationToken cancellationToken = default)
         => Task.FromResult<IReadOnlyList<AnnonceEmploi>>(_annonces.Where(a => a.EstActive).ToList());
+
+    public Task<IReadOnlyList<AnnonceEmploi>> ListerParEntrepriseAsync(Guid entrepriseId, CancellationToken cancellationToken = default)
+        => Task.FromResult<IReadOnlyList<AnnonceEmploi>>(_annonces.Where(a => a.EntrepriseId == entrepriseId).ToList());
+
+    public Task SupprimerAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        _annonces.FirstOrDefault(a => a.Id == id)?.Desactiver();
+        return Task.CompletedTask;
+    }
 }

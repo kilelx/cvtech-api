@@ -14,7 +14,7 @@ public class AbonnerDomaineCommandHandler(
     public async Task Handle(AbonnerDomaineCommand request, CancellationToken cancellationToken)
     {
         if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.SAbonnerDomaineMetier, cancellationToken))
-            throw new UnauthorizedAccessException("Permission refusée : abonnement domaine.");
+            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.SAbonnerDomaineMetier));
 
         if (await abonnementRepository.ExisteDejaAsync(request.UtilisateurId, request.DomaineMetier, cancellationToken))
             throw new AbonnementDejaExistantException(request.UtilisateurId, request.DomaineMetier);
