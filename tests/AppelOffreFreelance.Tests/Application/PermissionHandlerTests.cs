@@ -2,6 +2,7 @@ using AppelOffreFreelance.Tests.Fakes;
 using CVTech.Modules.AppelOffreFreelance.Application.Features.PublierAppelOffre;
 using CVTech.Modules.AppelOffreFreelance.Application.Features.SoumettreProposition;
 using CVTech.Modules.AppelOffreFreelance.Application.Features.SupprimerAppelOffre;
+using CVTech.Modules.AppelOffreFreelance.Domain.Entites;
 using CVTech.Modules.GestionIdentite.Contracts;
 using FluentAssertions;
 
@@ -44,11 +45,15 @@ public class PermissionHandlerTests
     [Fact]
     public async Task UnNonAdminNePeutPasSupprimerUnAppelOffre()
     {
+        var repo = new FakeAppelOffreRepository();
+        var ao = AppelOffre.Creer("Mission", "Contexte", "cloud", 10000m, DateTime.UtcNow.AddMonths(1), Guid.NewGuid());
+        repo.Ajouter(ao);
+
         var handler = new SupprimerAppelOffreCommandHandler(
-            new FakeAppelOffreRepository(),
+            repo,
             new FakeVerificateurPermission(autorise: false)
         );
-        var command = new SupprimerAppelOffreCommand(Guid.NewGuid(), Guid.NewGuid());
+        var command = new SupprimerAppelOffreCommand(Guid.NewGuid(), ao.Id);
 
         var act = () => handler.Handle(command, CancellationToken.None);
 

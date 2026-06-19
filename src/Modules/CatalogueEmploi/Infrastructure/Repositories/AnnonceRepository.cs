@@ -20,7 +20,7 @@ public class AnnonceRepository(CatalogueEmploiDbContext db) : IAnnonceRepository
         => await db.Annonces.Where(a => a.EstActive).ToListAsync(cancellationToken);
 
     public async Task<IReadOnlyList<AnnonceEmploi>> ListerParEntrepriseAsync(Guid entrepriseId, CancellationToken cancellationToken = default)
-        => await db.Annonces.Where(a => a.EntrepriseId == entrepriseId).ToListAsync(cancellationToken);
+        => await db.Annonces.Where(a => a.EntrepriseId == entrepriseId).Take(100).ToListAsync(cancellationToken);
 
     public async Task SupprimerAsync(Guid id, CancellationToken cancellationToken = default)
     {

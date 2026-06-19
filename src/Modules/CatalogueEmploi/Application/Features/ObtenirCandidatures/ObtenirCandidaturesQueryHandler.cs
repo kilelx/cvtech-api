@@ -17,8 +17,11 @@ public class ObtenirCandidaturesQueryHandler(
         if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.ConsulterCandidaturesRecues, cancellationToken))
             throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.ConsulterCandidaturesRecues));
 
-        _ = await annonceRepository.ObtenirParIdAsync(request.AnnonceId, cancellationToken)
+        var annonce = await annonceRepository.ObtenirParIdAsync(request.AnnonceId, cancellationToken)
             ?? throw new AnnonceIntrouvableException(request.AnnonceId);
+
+        if (annonce.EntrepriseId != request.UtilisateurId)
+            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.ConsulterCandidaturesRecues));
 
         return await candidatureRepository.ObtenirParAnnonceAsync(request.AnnonceId, cancellationToken);
     }

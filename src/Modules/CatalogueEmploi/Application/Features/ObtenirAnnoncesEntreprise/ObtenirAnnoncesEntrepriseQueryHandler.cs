@@ -12,8 +12,8 @@ public class ObtenirAnnoncesEntrepriseQueryHandler(
 {
     public async Task<IReadOnlyList<AnnonceEmploi>> Handle(ObtenirAnnoncesEntrepriseQuery request, CancellationToken cancellationToken)
     {
-        if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.PublierAnnonceEmploi, cancellationToken))
-            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.PublierAnnonceEmploi));
+        if (!await verificateur.AutoriserAsync(request.UtilisateurId, ActionSecurisee.ConsulterSesAnnonces, cancellationToken))
+            throw new PermissionRefuseeException(request.UtilisateurId, nameof(ActionSecurisee.ConsulterSesAnnonces));
 
         return await annonceRepository.ListerParEntrepriseAsync(request.UtilisateurId, cancellationToken);
     }

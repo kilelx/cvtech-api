@@ -36,7 +36,7 @@ public class AppelOffreController(ISender sender) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Publier([FromBody] PublierAppelOffreRequest dto, CancellationToken ct)
     {
-        var uid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var uid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Claim NameIdentifier manquant."));
         var id = await sender.Send(new PublierAppelOffreCommand(uid, dto.Titre, dto.Contexte, dto.DomaineMetier, dto.BudgetMax, dto.Deadline), ct);
         return CreatedAtAction(nameof(Publier), new { id }, new { id });
     }
@@ -44,7 +44,7 @@ public class AppelOffreController(ISender sender) : ControllerBase
     [HttpDelete("{appelOffreId:guid}")]
     public async Task<IActionResult> Supprimer(Guid appelOffreId, CancellationToken ct)
     {
-        var uid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var uid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Claim NameIdentifier manquant."));
         await sender.Send(new SupprimerAppelOffreCommand(uid, appelOffreId), ct);
         return NoContent();
     }
@@ -52,7 +52,7 @@ public class AppelOffreController(ISender sender) : ControllerBase
     [HttpPost("{appelOffreId:guid}/propositions")]
     public async Task<IActionResult> SoumettreProposition(Guid appelOffreId, [FromBody] SoumettrePropositionRequest dto, CancellationToken ct)
     {
-        var uid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var uid = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Claim NameIdentifier manquant."));
         var id = await sender.Send(new SoumettrePropositionCommand(uid, appelOffreId, dto.TauxJournalierMoyen, dto.DureeEstimeeJours, dto.Methodologie), ct);
         return CreatedAtAction(nameof(SoumettreProposition), new { id }, new { id });
     }

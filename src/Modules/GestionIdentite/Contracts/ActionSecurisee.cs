@@ -10,6 +10,7 @@ public enum ActionSecurisee
     PublierAnnonceEmploi,
     PublierAppelOffre,
     ConsulterCandidaturesRecues,
+    ConsulterSesAnnonces,
     SAbonnerDomaineMetier,
     PublierArticleActualite,
     ModererContenu,

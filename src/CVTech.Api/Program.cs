@@ -142,7 +142,8 @@ app.UseExceptionHandler(errorApp => errorApp.Run(async ctx =>
     ctx.Response.ContentType = "application/json";
     (int statusCode, string message) = error switch
     {
-        PermissionRefuseeException e => (403, e.Message),
+        PermissionRefuseeException _ => (403, "Permission refusée."),
+        UnauthorizedAccessException e => (401, e.Message),
         AnnonceIntrouvableException e => (404, e.Message),
         AppelOffreIntrouvableException e => (404, e.Message),
         ArticleIntrouvableException e => (404, e.Message),

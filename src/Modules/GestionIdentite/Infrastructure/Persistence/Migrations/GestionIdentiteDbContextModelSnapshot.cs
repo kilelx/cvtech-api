@@ -32,6 +32,10 @@ namespace GestionIdentite.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("EstActif")
+                        .HasDefaultValue(true)
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("MotDePasseHache")
                         .IsRequired()
                         .HasColumnType("TEXT");

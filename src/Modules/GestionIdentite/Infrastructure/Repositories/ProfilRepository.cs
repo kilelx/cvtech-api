@@ -53,7 +53,7 @@ public class ProfilRepository : IProfilRepository
         if (entreprise is not null) return entreprise.EstActif;
 
         var admin = await _context.Administrateurs.FindAsync([utilisateurId], cancellationToken);
-        return admin is not null;
+        return admin is not null && admin.EstActif;
     }
 
     public Task SauvegarderAsync(CancellationToken cancellationToken = default)

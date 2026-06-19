@@ -36,7 +36,7 @@ public class AnnonceController(ISender sender) : ControllerBase
     [HttpGet("mes-annonces")]
     public async Task<IActionResult> MesAnnonces(CancellationToken ct)
     {
-        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Claim NameIdentifier manquant."));
         var annonces = await sender.Send(new ObtenirAnnoncesEntrepriseQuery(utilisateurId), ct);
         return Ok(annonces.Select(a => new
         {
@@ -52,7 +52,7 @@ public class AnnonceController(ISender sender) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Publier([FromBody] PublierAnnonceRequest dto, CancellationToken ct)
     {
-        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Claim NameIdentifier manquant."));
         var id = await sender.Send(new PublierAnnonceCommand(utilisateurId, dto.Titre, dto.Description, dto.DomaineMetier, dto.TypeContrat), ct);
         return CreatedAtAction(nameof(Publier), new { id }, new { id });
     }
@@ -60,7 +60,7 @@ public class AnnonceController(ISender sender) : ControllerBase
     [HttpGet("{annonceId:guid}/candidatures")]
     public async Task<IActionResult> ObtenirCandidatures(Guid annonceId, CancellationToken ct)
     {
-        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Claim NameIdentifier manquant."));
         var candidatures = await sender.Send(new ObtenirCandidaturesQuery(utilisateurId, annonceId), ct);
         return Ok(candidatures.Select(c => new
         {
@@ -76,7 +76,7 @@ public class AnnonceController(ISender sender) : ControllerBase
     [HttpDelete("{annonceId:guid}")]
     public async Task<IActionResult> Supprimer(Guid annonceId, CancellationToken ct)
     {
-        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Claim NameIdentifier manquant."));
         await sender.Send(new SupprimerAnnonceCommand(utilisateurId, annonceId), ct);
         return NoContent();
     }
@@ -84,7 +84,7 @@ public class AnnonceController(ISender sender) : ControllerBase
     [HttpPost("{annonceId:guid}/candidatures")]
     public async Task<IActionResult> Postuler(Guid annonceId, [FromBody] PostulerAnnonceRequest dto, CancellationToken ct)
     {
-        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+        var utilisateurId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("Claim NameIdentifier manquant."));
         var id = await sender.Send(new PostulerAnnonceCommand(utilisateurId, annonceId, dto.CurriculumVitaeId, dto.LettreMotivation), ct);
         return CreatedAtAction(nameof(Postuler), new { id }, new { id });
     }

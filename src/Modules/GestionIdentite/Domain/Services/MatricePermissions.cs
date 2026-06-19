@@ -15,6 +15,7 @@ public static class MatricePermissions
         [ActionSecurisee.PublierAnnonceEmploi]           = [RoleUtilisateur.Entreprise, RoleUtilisateur.Administrateur],
         [ActionSecurisee.PublierAppelOffre]              = [RoleUtilisateur.Entreprise, RoleUtilisateur.Administrateur],
         [ActionSecurisee.ConsulterCandidaturesRecues]    = [RoleUtilisateur.Entreprise, RoleUtilisateur.Administrateur],
+        [ActionSecurisee.ConsulterSesAnnonces]           = [RoleUtilisateur.Entreprise, RoleUtilisateur.Administrateur],
         [ActionSecurisee.SAbonnerDomaineMetier]          = [RoleUtilisateur.Candidat, RoleUtilisateur.Entreprise, RoleUtilisateur.Administrateur],
         [ActionSecurisee.PublierArticleActualite]        = [RoleUtilisateur.Administrateur],
         [ActionSecurisee.ModererContenu]                 = [RoleUtilisateur.Administrateur],

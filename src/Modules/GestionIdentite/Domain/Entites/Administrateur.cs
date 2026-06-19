@@ -9,6 +9,7 @@ public class Administrateur
     public string MotDePasseHache { get; private set; } = string.Empty;
     public RoleUtilisateur Role { get; private set; } = RoleUtilisateur.Administrateur;
     public DateTime DateCreation { get; private set; }
+    public bool EstActif { get; private set; } = true;
 
     private Administrateur() { }
 
@@ -20,6 +21,9 @@ public class Administrateur
             Email = email,
             MotDePasseHache = motDePasseHache,
             DateCreation = DateTime.UtcNow,
+            EstActif = true,
         };
     }
+
+    public void Desactiver() => EstActif = false;
 }

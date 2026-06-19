@@ -17,6 +17,15 @@ public class ConnecterUtilisateurQueryHandler : IRequestHandler<ConnecterUtilisa
 
     public async Task<ConnexionResultat> Handle(ConnecterUtilisateurQuery request, CancellationToken cancellationToken)
     {
+        var admin = await _profilRepository.ObtenirAdministrateurParEmailAsync(request.Email, cancellationToken);
+        if (admin is not null && BCrypt.Net.BCrypt.Verify(request.MotDePasse, admin.MotDePasseHache))
+        {
+            if (!await _profilRepository.EstCompteActifAsync(admin.Id, cancellationToken))
+                throw new UnauthorizedAccessException("Ce compte administrateur a été désactivé.");
+            var token = _jwtService.GenererToken(admin.Id, admin.Role.ToString());
+            return new ConnexionResultat(admin.Id, admin.Role.ToString(), token);
+        }
+
         var candidat = await _profilRepository.ObtenirCandidatParEmailAsync(request.Email, cancellationToken);
         if (candidat is not null && BCrypt.Net.BCrypt.Verify(request.MotDePasse, candidat.MotDePasseHache))
         {
@@ -29,13 +38,6 @@ public class ConnecterUtilisateurQueryHandler : IRequestHandler<ConnecterUtilisa
         {
             var token = _jwtService.GenererToken(entreprise.Id, entreprise.Role.ToString());
             return new ConnexionResultat(entreprise.Id, entreprise.Role.ToString(), token);
-        }
-
-        var admin = await _profilRepository.ObtenirAdministrateurParEmailAsync(request.Email, cancellationToken);
-        if (admin is not null && BCrypt.Net.BCrypt.Verify(request.MotDePasse, admin.MotDePasseHache))
-        {
-            var token = _jwtService.GenererToken(admin.Id, admin.Role.ToString());
-            return new ConnexionResultat(admin.Id, admin.Role.ToString(), token);
         }
 
         throw new UnauthorizedAccessException("Email ou mot de passe incorrect.");
